@@ -16,6 +16,7 @@ def welcome():
 def render_static(page_name):
     return render_template('%s.html' % page_name)
 
+
 class Users(Resource):
     def get(self):
         return {'Users': [{'id': 1, 'name': 'Keith'}, {'id': 2, 'name': 'James'}]}
