@@ -1,0 +1,136 @@
+/var/flaskapp
+
+flaskapp
+|--howto.txt
+|--README.md
+|--.gitignore
+|--.git
+  |--
+|--simpleapp
+  |--requirements.txt
+  |--start.sh
+  |--src
+    |--__init__.py
+  |--static
+
+#############
+## requirements.txt
+#############
+Flask==0.12.2
+
+#############
+
+source simpleappenv/bin/activate
+gunicorn --workers 5 --bind unix:simpleapp.sock -m 007 src:app
+deactivate
+
+#############
+## src/__init__.py
+#############
+from flask import Flask
+app = Flask(__name__)
+  
+@app.route('/')
+def hello_world():
+    return 'Hello there, welcome to our app!'
+
+###############
+sudo apt-get update
+sudo apt-get install nginx -y
+###############
+sudo systemctl status nginx
+##############
+
+##############
+sudo apt-get install supervisor -y
+##############
+sudo systemctl status supervisor
+##############
+
+##############
+cd /var/flaskapp/simpleapp
+virtualenv -p python3 simpleappenv
+source simpleappenv/bin/activate
+pip install -r requirements.txt
+deactivate
+############
+
+############
+cd /var/flaskapp/simpleapp
+source simpleappenv/bin/activate
+pip install gunicorn
+deactivate
+
+######
+ls -lm
+######
+
+############
+sudo chown -R www-data:www-data /var/flaskapp/simpleapp
+############
+
+############
+/etc/supervisor/conf.d
+############
+sudo nano /etc/supervisor/conf.d/simpleapp.conf
+############
+[program:simple-flask-app]
+directory=/var/flaskapp/simpleapp
+command=/bin/bash -E -c ./start.sh
+autostart=true
+autorestart=true
+stopsignal=INT
+stopasgroup=true
+killasgroup=true
+user=www-data
+###########
+
+sudo systemctl restart supervisor.service
+sudo supervisorctl
+--tail simple-flask-app stdout
+
+##########
+sudo nano /etc/nginx/sites-enabled/simpleapp.techcoil.com
+##########
+server {
+ 
+    server_name simpleapp.techcoil.com;
+    listen 80;
+    root /var/flaskapp/simpleapp/static;
+ 
+    location / {
+        try_files $uri @simpleapp-flask;
+    }
+ 
+    location @simpleapp-flask {
+        include proxy_params;
+        proxy_pass http://unix:/var/flaskapp/simpleapp/simpleapp.sock;
+    }
+ 
+}
+#########
+
+#########
+C:\Windows\System32\drivers\etc\hosts
+#########
+192.168.1.109 simpleapp.techcoil.com
+#########
+
+#########
+sudo ifconfig
+#########
+inet 192.168.1.100
+#########
+
+#########
+open port 8080 to point to 80 on router
+#########
+
+#########
+https://www.ipchicken.com/
+#########
+60.242.219.185
+#########
+60.242.219.185:8080
+#########
+
